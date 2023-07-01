@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Order
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+    <div class="col-7 border p-5">
+        <p>
+            <span class="fw-bold">User: </span> {{ order.user }}
+        </p>
+        <p>
+            <span class="fw-bold">Full Name: </span> {{ order.full_name }}
+        </p>
+        <p>
+            <span class="fw-bold">Address: </span> St: {{ order.street }} No.{{ order.number }} {{ order.city }}
+        </p>
+        <p>
+            <span class="fw-bold">Phone: </span> {{ order.phone }}
+        </p>
+        <p>
+            <span class="fw-bold">Payment: </span> {{ order.payment_method }}
+        </p>
+    </div>
+    <div class="col-5 border p-5">
+        <p><span class="fw-bold">Products: </span> </p>
+        {% for cart_item in cart_items %}
+            <p>{{ cart_item.phone }}               x{{ cart_item.quantity }}</p>
+        {% endfor %}
+    </div>
+    </div>
+
+{% endblock %}

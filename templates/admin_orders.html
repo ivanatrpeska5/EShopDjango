@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    My Orders
+{% endblock %}
+
+{% block content %}
+    <h5 class="display-6">Created orders</h5>
+    <table class="table pt-3">
+        <thead class="table-success">
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Order Address</th>
+            <th>Order Total Amount</th>
+            <th>Order Status</th>
+            <th>Order Details</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for order in created_orders %}
+            <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.date_created }}</td>
+            <td>St: {{ order.street }} No.{{ order.number }} {{ order.city }}</td>
+            <td>{{ order.total_amount }}</td>
+            <td>{{ order.order_status }}</td>
+            <td><a href="{% url 'order_details' order.id %}" style="width: 100%" class="btn btn-dark">Details</a></td>
+            {% if order.order_status == 'Created' %}
+                <td><a href="{% url 'in_delivery_order' order.id %}" class="btn btn-success">Set in delivery</a></td>
+            {% endif %}
+        {% endfor %}
+    </table>
+        <h5 class="display-6">InDelivery orders</h5>
+    <table class="table pt-3">
+        <thead class="table-success">
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Order Address</th>
+            <th>Order Total Amount</th>
+            <th>Order Status</th>
+            <th>Order Details</th>
+        </thead>
+        <tbody>
+        {% for order in in_delivery_orders %}
+            <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.date_created }}</td>
+            <td>St: {{ order.street }} No.{{ order.number }} {{ order.city }}</td>
+            <td>{{ order.total_amount }}</td>
+            <td>{{ order.order_status }}</td>
+            <td><a href="{% url 'order_details' order.id %}" style="width: 100%" class="btn btn-dark">Details</a></td>
+            {% if order.order_status == 'Created' %}
+                <td><a href="{% url 'in_delivery_order' order.id %}" class="btn btn-success">Set in delivery</a></td>
+            {% endif %}
+        {% endfor %}
+    </table>
+        <h5 class="display-6">Finished orders</h5>
+    <table class="table pt-3">
+        <thead class="table-success">
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Order Address</th>
+            <th>Order Total Amount</th>
+            <th>Order Status</th>
+            <th>Order Details</th>
+        </thead>
+        <tbody>
+        {% for order in finished_orders %}
+            <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.date_created }}</td>
+            <td>St: {{ order.street }} No.{{ order.number }} {{ order.city }}</td>
+            <td>{{ order.total_amount }}</td>
+            <td>{{ order.order_status }}</td>
+            <td><a href="{% url 'order_details' order.id %}" style="width: 100%" class="btn btn-dark">Details</a></td>
+            {% if order.order_status == 'Created' %}
+                <td><a href="{% url 'in_delivery_order' order.id %}" style="width: 100%" class="btn btn-success">Set in delivery</a></td>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+{% endblock %}

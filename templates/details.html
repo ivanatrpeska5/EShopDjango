@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ MEDIA_URL }} {{ phone.phone.url }}" alt="" class=" img-fluid">
+        </div>
+        <div class="col-md-6 mt-5">
+            <h1 class="mt-2">{{ phone.name }}</h1>
+            <h4 style="font-weight: normal">{{ phone.manufacturer }}</h4>
+            <h4 style="font-weight: normal">Price: <span class="fw-bold">{{ phone.price }} MKD</span></h4>
+            <h5 class="mt-5">Choose color: </h5>
+
+            <form  method="post" action="{% url 'add_to_cart' phone.id %}">
+                {% csrf_token %}
+                <div class="row text-center pt-3">
+                    {% for color in colors %}
+                        <div class="card col text-center radio-option pb-3">
+                            <img src="{{ MEDIA_URL }} {{ color.color.image.url }}" alt=""
+                                 class="img-fluid ms-auto me-auto mt-3"
+                                 style="height: 3rem; width:3rem; border-radius: 50%;">
+                            <label for="{{ color.color.name }}" class="selectedLabel">{{ color.color.name }}</label>
+                            <input type="radio" id="{{ color.color.id }}" name="color" value="{{ color.color.id }}" checked
+                                    {% if color.checked %}
+                                   checked
+                                    {% endif %}>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row pt-3 mt-5">
+                    <div class="col-md-4">
+                        {% if has_in_stock %}
+                            <div class="border border-3 border-success text-success rounded-pill w-75 text-center fw-bold p-2"
+                                 disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                     class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                                </svg>
+                                Stock
+                            </div>
+                        {% else %}
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" value="1" min="0" name="quantity" class="w-100 form-control">
+                    </div>
+                    <div class="col-md-6">
+                        {% if successfully_added_to_cart or already_in_cart or request.user.is_superuser or not request.user.is_authenticated %}
+                        <button type="submit" class="btn btn-success rounded-pill fw-bold w-100 p-2" disabled>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-cart3" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                            </svg>
+                            Add to Cart
+                        </button>
+                            {% if request.user.is_superuser or not request.user.is_authenticated %}
+                                <h5>Login as User to order a product</h5>
+                                {% endif %}
+                        {% else %}
+                        <button type="submit" class="btn btn-success rounded-pill fw-bold w-100 p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-cart3" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                            </svg>
+                            Add to Cart
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+            {% if successfully_added_to_cart == None %}
+                {% if already_in_cart %}
+                <div class="text-white bg-warning w-100 mt-3">
+                    The product is already in the shopping cart!
+                </div>
+                {% endif %}
+            {% elif successfully_added_to_cart %}
+                <div class="text-white bg-success w-100 mt-3">
+                    Successfully added to cart!
+                </div>
+
+            {% else %}
+                <div class="text-white bg-danger w-100 mt-3">
+                    Not enough in stock!
+                </div>
+            {% endif %}
+        </div>
+
+        <div>
+
+        </div>
+    </div>
+    <h3>Specifications:</h3>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+              <th scope="row">Technology</th>
+              <td>{{ phone.technology }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Dimensions</th>
+              <td>{{ phone.dimensions }}</td>
+            </tr>
+            <tr>
+              <th scope="row">OS</th>
+              <td>{{ phone.os }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Chipset</th>
+              <td>{{ phone.chipset }}</td>
+            </tr>
+            <tr>
+              <th scope="row">CPU</th>
+              <td>{{ phone.CPU }}</td>
+            </tr>
+            <tr>
+              <th scope="row">GPU</th>
+              <td>{{ phone.GPU }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Memory</th>
+              <td>{{ phone.memory }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Main Camera</th>
+              <td>{{ phone.main_camera }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Front Camera</th>
+              <td>{{ phone.front_camera }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Battery</th>
+              <td>{{ phone.battery }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+<!--
+<div class="card">
+            <img src="{{ MEDIA_URL }} {{ phone.phone.url }}" alt="" class="card-img-top img-fluid">
+            <div class="card-body">
+                <p>{{ phone.name }}</p>
+                <p>{{ phone.price }} MKD</p>
+                <a class="btn btn-success" href="#">Details</a>
+            </div>
+        </div>
+-->

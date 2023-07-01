@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Successful delete product
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center pt-5">
+    <h3 class="display-4 mb-5 text-center">You successfully deleted the product!</h3>
+        <div class="col-md-6 mt-5">
+            <a href="{% url 'store' %}" class="btn btn-dark w-100 mb-3 p-2 " style="font-size: 1.5em">Back to store</a>
+            <a href="{% url 'add_product' %}" class="btn btn-success w-100 mb-5 p-2" style="font-size: 1.5em">Add a new Product</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    My Orders
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="display-6">My orders</h1>
+    <table class="table pt-3">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Order Address</th>
+            <th>Order Total Amount</th>
+            <th>Order Status</th>
+            <th>Order Details</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.date_created }}</td>
+            <td>St: {{ order.street }} No.{{ order.number }} {{ order.city }}</td>
+            <td>{{ order.total_amount }}</td>
+            <td>{{ order.order_status }}</td>
+            <td><a href="{% url 'order_details' order.id %}" class="btn btn-dark w-100">Details</a></td>
+            {% if order.order_status == 'Created' %}
+                <td><a href="{% url 'cancel_order' order.id %}" class="btn btn-danger w-100">Cancel</a></td>
+            {% endif %}
+            {% if order.order_status == 'InDelivery' %}
+                <td><a href="{% url 'finished_order' order.id %}" class="btn btn-success w-100">Mark as Finished</a></td>
+            {% endif %}
+            {% if order.order_status == 'Finished' %}
+                <td><p class="bg-secondary  w-100">No Available Actions</p></td>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+{% endblock %}

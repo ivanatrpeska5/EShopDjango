@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1 class="display-6">My Shopping Cart</h1>
+    </div>
+    <div class="row">
+        {% for cart_item in cart_items %}
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <img src="{{ MEDIA_URL }} {{ cart_item.phone.phone.url }}" alt="" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <h6>{{ cart_item.phone.name }}</h6>
+                        <p>Quantity : {{ cart_item.quantity }} Price for one : {{ cart_item.phone.price }}</p>
+                        <p>Subtotal: {{ cart_item.subtotal }} </p>
+                    </div>
+                    <a class="btn btn-danger" href="{% url 'delete_from_cart' cart_item.id %}"
+                       style="position:absolute; right: 3%; top: 3%">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-x-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                        </svg>
+                    </a>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+    {% if cart_items %}
+        <div class="text-center">
+            <h6>Total Amount : {{ total_amount }}</h6>
+            <a href="{% url 'order_form' %}" class="btn btn-success rounded-pill"
+               style="padding: 1rem 10rem 1rem 10rem; font-size: 1.60rem;">Buy All Products</a>
+        </div>
+    {% else %}
+        <div class="text-center mt-5">
+            <h3 class="mt-5">Go to Store to add a Phone in your Cart</h3>
+            <a href="{% url 'store' %}" class="btn btn-success rounded-pill mt-2"
+               style="padding: 1rem 10rem 1rem 10rem; font-size: 1.60rem;">Store</a>
+        </div>
+    {% endif %}
+{% endblock %}

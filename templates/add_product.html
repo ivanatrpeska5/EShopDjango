@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Add product
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 card p-4">
+    <h3 class="text-success">Add new Phone:</h3>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ formset.management_form }}
+        {% for subform in formset %}
+            {{ subform.as_p }}
+        {% endfor %}
+        <button type="submit" class="btn btn-success w-100">Add Product</button>
+    </form>
+    </div>
+    <div class="col-md-2"></div>
+    </div>
+{% endblock %}
